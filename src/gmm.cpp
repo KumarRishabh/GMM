@@ -69,7 +69,8 @@ void processVideo(Mat img) {
             vector<Point2f>center( contours.size() );
             vector<float>radius( contours.size() );
             vector<vector<Point> > contours_poly( contours.size() );
-            vector<Rect> boundRect( contours.size() );
+            Point2f vertex;
+            Point2f vertex_opp;
 
             for( ; idx >= 0; idx = hierarchy[idx][0] )
             {
@@ -80,15 +81,19 @@ void processVideo(Mat img) {
                     maxArea = area;
                     largestComp = idx;
                 }
-                boundRect[idx] = boundingRect( Mat(contours_poly[idx]) );
+                
                 approxPolyDP( Mat(contours[idx]), contours_poly[idx], 3, true );
                 minEnclosingCircle( (Mat)contours_poly[idx], center[idx], radius[idx] );
             }
-            cout << "------------------------------------" << endl;
-            cout << [largestComp] << endl ;
+            
             Scalar color( 0, 0, 255 );
-            rectangle( drawing, boundRect[largestComp].tl(), boundRect[largestComp].br(), color, 2, 8, 0 );
+            
+            vertex.y = center[largestComp].y - radius[largestComp];
+            vertex.x = center[largestComp].x - radius[largestComp];
+            vertex_opp.y = center[largestComp].y + radius[largestComp];
+            vertex_opp.x = center[largestComp].x + radius[largestComp];
             drawContours( dst, contours, largestComp, color, FILLED, LINE_8, hierarchy );
+            rectangle( drawing, vertex, vertex_opp , color, 2, 8, 0 );
             circle( drawing, center[largestComp], (int)radius[largestComp], color, 2, 8, 0 );
            imshow("contours",drawing);
 
