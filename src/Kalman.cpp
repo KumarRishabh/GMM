@@ -17,9 +17,10 @@ using namespace cv;
 using namespace std;
 
 ros::Publisher pub_n;
-static Mat_<float> measurement(2,1);
+ Mat_<float> measurement(2,1);
+static Mat_<float> intial(2,1);
 static KalmanFilter KF(4, 2, 0);
-
+int flag = 0;
 
 void kfilter(const std_msgs::Int64MultiArray::ConstPtr& num) {
 
@@ -28,44 +29,50 @@ void kfilter(const std_msgs::Int64MultiArray::ConstPtr& num) {
   KF.transitionMatrix = (Mat_<float>(4, 4) << 1,0,dt,0,   0,1,0,dt,  0,0,1,0,  0,0,0,1);
 
   setIdentity(KF.measurementMatrix);
-//    setIdentity(KF.processNoiseCov, Scalar::all(0.5));
-//  setIdentity(KF.measurementNoiseCov, Scalar::all(0.1));
-//  setIdentity(KF.errorCovPost, Scalar::all(1));
+  setIdentity(KF.processNoiseCov, Scalar::all(0.5));
+  setIdentity(KF.measurementNoiseCov, Scalar::all(0.1));
+  setIdentity(KF.errorCovPost, Scalar::all(1));
 
   std_msgs::Int64MultiArray s;
-while(ros::ok()){
+   
+
   // PREDICTION
+  	// static intial(1)=num->data[0];
+  	// static intial(0)=num->data[1];
      Mat prediction = KF.predict();
  	   Point predictPt(prediction.at<float>(0),prediction.at<float>(1));
-	   cout<<"PREDICTED :  "<<predictPt<<endl;
 
 	// MEASUREMENT
      measurement(1)= num->data[0];
    	 measurement(0) = num->data[1];
 
-
     	Point measPt(measurement(0), measurement(1));
+   	 	cout << "MEASUREMENT :  " << measPt << endl;
   // CORRECTION
      Mat estimated = KF.correct(measurement);
  	   Point statePt(estimated.at<float>(0),estimated.at<float>(1));
- 	for(int count = 0; ; count++ ){
- 		if((statePt.x-measPt.x)*(statePt.y-measPt.y) < 10){
- 			continue;
+	   cout<<"ESTIMATED :  "<<statePt<<endl;
+ 	
+ 	 	if(abs((statePt.x-measPt.x)*(statePt.y-measPt.y)) < 100){
+ 			flag++;
+ 			cout << flag << endl ;
  		}
  		else{
- 			break;
+ 			flag = 0; 
  		}
- 		if (count==10)
+ 		if (flag==10)
  		{
 			s.data.push_back(statePt.x);
 			s.data.push_back(statePt.y);
 			s.data.push_back(num->data[2]);
 			pub_n.publish(s);
-			break;
+			ros::shutdown();
+		
 		}
-	}
+
   ROS_INFO("Values sent to topic-print\n");
- }
+  
+
  return ;
 }
 
