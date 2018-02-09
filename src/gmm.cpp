@@ -24,7 +24,7 @@ static Ptr<BackgroundSubtractor> pMOG2; //MOG2 Background subtractor
  */
 void processVideo(Mat img) {
 
-        std_msgs::Int64MultiArray s;
+        std_msgs::Int64MultiArray vertices;
 
         Mat img_hsv;
         cvtColor(img,img_hsv, CV_BGR2HSV);
@@ -95,14 +95,14 @@ void processVideo(Mat img) {
             drawContours( dst, contours, largestComp, color, FILLED, LINE_8, hierarchy );
             rectangle( drawing, vertex, vertex_opp , color, 2, 8, 0 );
             circle( drawing, center[largestComp], (int)radius[largestComp], color, 2, 8, 0 );
-           imshow("contours",drawing);
+            imshow("contours",drawing);
 
-          s.data.push_back(center[largestComp].y);
-         	s.data.push_back(center[largestComp].x);
-         	s.data.push_back(radius[largestComp]);
+            vertices.data.push_back(center[largestComp].y);
+         	  vertices.data.push_back(center[largestComp].x);
+         	  vertices.data.push_back(radius[largestComp]);
 
-           ROS_INFO("Values sent to topic-print\n");
-           pub_n.publish(s);
+            ROS_INFO("Values sent to topic-print\n");
+            pub_n.publish(vertices);
         }
 
         else return;
@@ -140,7 +140,7 @@ void call(const sensor_msgs::ImageConstPtr& msg){
 int main(int argc, char** argv) {
 
   pMOG2 = createBackgroundSubtractorMOG2();
-  ros::init(argc, argv, "object_detect");
+  ros::init(argc, argv, "object_detect1");
   ros::NodeHandle nh;
   image_transport::ImageTransport it(nh);
 

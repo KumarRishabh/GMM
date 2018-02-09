@@ -30,7 +30,7 @@ int main(int argc, char ** argv)
  ros::init(argc, argv, "input_image");
  ros::NodeHandle nh;
  image_transport::ImageTransport it(nh);
-
+ //Yahan pe docs aaenge
  image_transport::Publisher image_pub = it.advertise("input", 1);
 
  ros::Rate loop_rate(10);

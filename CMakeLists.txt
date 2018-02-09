@@ -20,6 +20,9 @@ include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 
+add_executable(kalman src/Kalman.cpp)
+target_link_libraries(kalman ${OpenCV_LIBRARIES}  ${catkin_LIBRARIES})
+
 add_executable(gmm src/gmm.cpp)
 target_link_libraries(gmm  ${OpenCV_LIBRARIES}  ${catkin_LIBRARIES})
 
