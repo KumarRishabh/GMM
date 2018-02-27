@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(GMM)
+project(GMM_r)
 
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
@@ -20,11 +20,13 @@ include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 
-add_executable(gmm src/gmm.cpp)
-target_link_libraries(gmm  ${OpenCV_LIBRARIES}  ${catkin_LIBRARIES})
+add_executable(gmm_r src/gmm_r.cpp)
+target_link_libraries(gmm_r  ${OpenCV_LIBRARIES}  ${catkin_LIBRARIES})
 
-add_executable(pub src/publisher.cpp)
-target_link_libraries(pub  ${OpenCV_LIBRARIES}  ${catkin_LIBRARIES})
+add_executable(pub_r src/publisher_r.cpp)
+target_link_libraries(pub_r  ${OpenCV_LIBRARIES}  ${catkin_LIBRARIES})
 
-add_executable(sub src/subscriber.cpp)
-target_link_libraries(sub  ${OpenCV_LIBRARIES}  ${catkin_LIBRARIES})
+add_executable(sub_r src/subscriber_r.cpp)
+target_link_libraries(sub_r  ${OpenCV_LIBRARIES}  ${catkin_LIBRARIES})
+add_executable(kalman_r src/kalman_r.cpp)
+target_link_libraries(kalman_r ${OpenCV_LIBRARIES}  ${catkin_LIBRARIES})

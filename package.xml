@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>GMM</name>
+  <name>GMM_r</name>
   <version>0.0.0</version>
   <description>The GMM package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="ayu@todo.todo">ayu</maintainer>
+  <maintainer email="ris@todo.todo">ayu</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
