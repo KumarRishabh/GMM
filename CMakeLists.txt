@@ -7,9 +7,18 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   std_msgs
+  actionlib
+  actionlib_msgs
+  genmsg
 )
 
 find_package(OpenCV REQUIRED)
+
+find_package(catkin REQUIRED genmsg actionlib_msgs actionlib)
+
+add_action_files(DIRECTORY action FILES mission.action)
+
+generate_messages(DEPENDENCIES actionlib_msgs)
 
 catkin_package(
   CATKIN_DEPENDS cv_bridge image_transport roscpp std_msgs sensor_msgs
